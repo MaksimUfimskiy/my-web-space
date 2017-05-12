@@ -1,0 +1,22 @@
+{
+  "name": "my-web-space",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/MaksimUfimskiy/my-web-space.git",
+  "author": "Maksim Ufimskiy <Maksim.Ufimskiy@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  },
+  "devDependencies": {
+    "react-scripts": "0.9.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
