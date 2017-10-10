@@ -7,6 +7,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "d3": "^4.11.0",
     "history": "^4.6.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
@@ -16,9 +17,10 @@
     "redux": "^3.6.0"
   },
   "devDependencies": {
+    "child_process": "^1.0.2",
     "node-sass-chokidar": "^0.0.1",
     "npm-run-all": "^4.0.2",
-    "react-scripts": "0.9.5"
+    "react-scripts": "^1.0.14"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
