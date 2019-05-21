@@ -1,9 +1,15 @@
 import React, {Component} from 'react';
+import * as d3 from "d3";
 
 class AudioPlayer extends Component {
   constructor(props) {
     super(props);
+    this.frequencyData = new Uint8Array(200);
+    this.svgHeight = '300';
+    this.svgWidth = '1200';
+    this.barPadding = '1';
     this.handleChange = this.handleChange.bind(this);
+    this.renderChart = this.renderChart.bind(this);
   }
   componentDidMount() {
     const audio = this.audioEl;
@@ -25,6 +31,7 @@ class AudioPlayer extends Component {
     // When audio play starts
     audio.addEventListener('play', (e) => {
       this.setListenTrack();
+      this.renderChart();
       this.props.onPlay(e);
     });
 
@@ -51,8 +58,34 @@ class AudioPlayer extends Component {
       this.clearListenTrack();
       this.props.onSeeked(e);
     });
+    this.svg = this.createSvg('body', this.svgHeight, this.svgWidth);
+    this.svg.selectAll('rect')
+      .data(this.frequencyData)
+      .enter()
+      .append('rect')
+      .attr('x', (d, i) => {
+        return i * (this.svgWidth / this.frequencyData.length);
+      })
+      .attr('width', this.svgWidth / this.frequencyData.length - this.barPadding);
   }
-
+  createSvg(parent, height, width) {
+    return d3.select(parent).append('svg').attr('height', height).attr('width', width);
+  }
+  renderChart() {
+    requestAnimationFrame(this.renderChart);
+    this.analyser.getByteFrequencyData(this.frequencyData);
+    this.svg.selectAll('rect')
+      .data(this.frequencyData)
+      .attr('y', (d) => {
+        return this.svgHeight - d;
+      })
+      .attr('height', (d) => {
+        return d;
+      })
+      .attr('fill', (d) => {
+        return 'rgb(0, 0, ' + d + ')';
+      });
+  }
   /**
    * Set an interval to call props.onListen every props.listenInterval time period
    */
@@ -80,6 +113,11 @@ class AudioPlayer extends Component {
       path: event.target.value,
       data: window.URL.createObjectURL(event.target.files[0])
     });
+    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    this.audioSrc = audioCtx.createMediaElementSource(this.audioEl);
+    this.analyser = audioCtx.createAnalyser();
+    this.audioSrc.connect(this.analyser);
+    this.audioSrc.connect(audioCtx.destination);
   }
 
   render() {

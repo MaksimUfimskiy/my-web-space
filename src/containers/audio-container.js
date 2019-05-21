@@ -21,6 +21,6 @@ const mapDispatchToProps = (dispatch) => {
 const AudioPlayerContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(AudioPlayer)
+)(AudioPlayer);
 
 export default AudioPlayerContainer;
